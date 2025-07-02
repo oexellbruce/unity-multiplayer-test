@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class playerController : MonoBehaviour
+public class playerController : NetworkBehaviour
 {
 
     public float speed = 1f;
@@ -19,8 +20,13 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float frameSpeed = speed * Time.deltaTime;
+        if (!IsOwner) return;
+        Move();
+    }
 
+    void Move()
+    {
+        float frameSpeed = speed * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.UpArrow))      { position.y += frameSpeed; }
         if (Input.GetKey(KeyCode.DownArrow))    { position.y -= frameSpeed; }
@@ -28,6 +34,5 @@ public class playerController : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow))   { position.x += frameSpeed; }
 
         player.transform.position = position;
-
     }
 }
